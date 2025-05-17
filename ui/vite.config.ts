@@ -5,11 +5,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import babel from "vite-plugin-babel";
 
 const ReactCompilerConfig = {
-    
+
 }
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths(),     babel({
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths(), babel({
     filter: /\.[jt]sx?$/,
     babelConfig: {
       presets: ["@babel/preset-typescript"], // if you use TypeScript
