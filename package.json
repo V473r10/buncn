@@ -1,11 +1,16 @@
 {
-    "name": "buncn",
-    "private": true,
-    "workspaces": [
-        "*"
-    ],
-    "scripts": {
-        "build": "bun run --hot api/src/index.ts",
-        "dev": "cd api && bun run dev & cd ui && bun run dev"
-    }
+  "name": "buncn",
+  "private": true,
+  "workspaces": [
+    "*"
+  ],
+  "scripts": {
+    "build": "bun run --hot api/src/index.ts",
+    "dev": "cd api && bun run dev & cd ui && bun run dev"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@tailwindcss/oxide",
+    "esbuild"
+  ]
 }
