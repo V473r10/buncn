@@ -5,9 +5,13 @@
   },
   "dependencies": {
     "better-auth": "^1.2.8",
-    "hono": "^4.7.9"
+    "drizzle-orm": "^0.43.1",
+    "hono": "^4.7.9",
+    "mysql2": "^3.14.1",
+    "pg": "^8.16.0"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "^1.2.13",
+    "drizzle-kit": "^0.31.1"
   }
 }
