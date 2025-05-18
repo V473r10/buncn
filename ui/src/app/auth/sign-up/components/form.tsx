@@ -5,6 +5,8 @@ import { signUp } from "@/lib/auth-client"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
+import { useNavigate } from "react-router"
 
 const passwordSchema = z.string()
   .min(8, { message: "Password must be at least 8 characters" })
@@ -32,7 +34,7 @@ const FormSchema = z.object({
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const form = useAppForm({
     validators: { onChange: FormSchema },
@@ -43,7 +45,6 @@ export function SignUpForm() {
       confirmPassword: "",
     },
     onSubmit: async ({ value }) => {
-      setError(null)
       setIsLoading(true)
       try {
         await signUp.email({
@@ -51,8 +52,11 @@ export function SignUpForm() {
           email: value.email,
           password: value.password,
         })
+        toast.success("Account created successfully!")
+        navigate("/")
       } catch (err) {
-        setError("Failed to create account. Please try again.")
+        const errorMessage = err instanceof Error ? err.message : "Failed to create account. Please try again."
+        toast.error(errorMessage)
         console.error("Sign up failed:", err)
       } finally {
         setIsLoading(false)
@@ -72,11 +76,7 @@ export function SignUpForm() {
   return (
     <form.AppForm>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
+
         
         <form.AppField
           name="name"

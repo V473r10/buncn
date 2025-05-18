@@ -5,7 +5,8 @@ import { signIn } from "@/lib/auth-client"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { toast } from "sonner"
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -18,7 +19,7 @@ const FormSchema = z.object({
 
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const form = useAppForm({
     validators: { onChange: FormSchema },
@@ -27,15 +28,17 @@ export function SignInForm() {
       password: "",
     },
     onSubmit: async ({ value }) => {
-      setError(null)
       setIsLoading(true)
       try {
         await signIn.email({
           email: value.email,
           password: value.password,
         })
+        toast.success("Signed in successfully!")
+        navigate("/")
       } catch (err) {
-        setError("Invalid email or password. Please try again.")
+        const errorMessage = err instanceof Error ? err.message : "Invalid email or password. Please try again."
+        toast.error(errorMessage)
         console.error("Sign in failed:", err)
       } finally {
         setIsLoading(false)
@@ -55,11 +58,6 @@ export function SignInForm() {
   return (
     <form.AppForm>
       <form className="space-y-4" onSubmit={handleSubmit}>
-        {error && (
-          <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
         
         <form.AppField name="email">
           {(field) => (
