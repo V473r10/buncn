@@ -2,11 +2,11 @@
   "name": "buncn",
   "private": true,
   "workspaces": [
-    "*"
+    "packages/*"
   ],
   "scripts": {
-    "build": "bun run --hot api/src/index.ts",
-    "dev": "cd api && bun run dev & cd ui && bun run dev"
+    "build": "cd packages/api && bun run build & cd packages/ui && bun run build",
+    "dev": "cd packages/api && bun run dev & cd packages/ui && bun run dev"
   },
   "trustedDependencies": [
     "@biomejs/biome",
