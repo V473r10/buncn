@@ -24,8 +24,8 @@ createRoot(document.getElementById("root")!).render(
 					}
 				>
 					<Route index element={<Home />} />
+					<Route path="test-rpc" element={<TestRpc />} />
 				</Route>
-				<Route path="test-rpc" element={<TestRpc />} />
 				<Route
 					path="auth"
 					element={
