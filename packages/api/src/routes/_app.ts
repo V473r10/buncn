@@ -9,6 +9,7 @@ export const appRouter = router({
 	userList: publicProcedure.query(async () => {
 		// Retrieve users from a datasource, this is an imaginary database
 		const users = await db.user.findMany();
+		console.log(users);
 		//    ^?
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 		return users;
