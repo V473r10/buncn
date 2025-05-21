@@ -4,11 +4,14 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
+    "@hono/trpc-server": "^0.3.4",
+    "@trpc/server": "^11.1.2",
     "better-auth": "^1.2.8",
     "drizzle-orm": "^0.43.1",
     "hono": "^4.7.9",
     "mysql2": "^3.14.1",
-    "pg": "^8.16.0"
+    "pg": "^8.16.0",
+    "zod": "^3.25.12"
   },
   "devDependencies": {
     "@types/bun": "^1.2.13",

@@ -13,7 +13,8 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "@buncn/api/*": ["../api/src/*"]
     },
     "strictNullChecks": true
   }
