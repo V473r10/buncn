@@ -6,7 +6,8 @@
   ],
   "scripts": {
     "build": "cd packages/api && bun run build & cd packages/ui && bun run build",
-    "dev": "cd packages/api && bun run dev & cd packages/ui && bun run dev"
+    "dev": "cd packages/api && bun run dev & cd packages/ui && bun run dev",
+    "migrate": "cd packages/api && bun run migrate"
   },
   "trustedDependencies": [
     "@biomejs/biome",
