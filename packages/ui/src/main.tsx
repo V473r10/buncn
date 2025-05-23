@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Home from "./app/home/home.tsx";
 import { MainLayout } from "./components/main-layout";
 import "./index.css";
+import { Toaster } from "sonner";
 import AuthLayout from "./app/auth/auth-layout.tsx";
 import SignIn from "./app/auth/sign-in/sign-in.tsx";
 import SignUp from "./app/auth/sign-up/sign-up.tsx";
@@ -52,5 +53,6 @@ createRoot(document.getElementById("root")!).render(
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>
 		</BrowserRouter>
+		<Toaster />
 	</StrictMode>,
 );

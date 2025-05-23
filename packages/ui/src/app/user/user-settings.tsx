@@ -310,6 +310,43 @@ export function UserSettings() {
 									</div>
 								</div>
 
+								{/* TOTP Verification Input Section */}
+								{showTotpVerificationInput && (
+									<div className="p-4 border rounded-md bg-sky-50 dark:bg-sky-900/30 mt-4">
+										<h3 className="font-semibold text-sky-700 dark:text-sky-400">
+											Verify Authenticator App
+										</h3>
+										<p className="text-sm text-sky-600 dark:text-sky-500 mb-3">
+											Enter the 6-digit code from your authenticator app to
+											complete the setup.
+										</p>
+										<div className="flex items-center space-x-2">
+											<InputOTP
+												maxLength={6}
+												value={totpCodeInput}
+												onChange={(value) => setTotpCodeInput(value)}
+											>
+												<InputOTPGroup>
+													<InputOTPSlot index={0} />
+													<InputOTPSlot index={1} />
+													<InputOTPSlot index={2} />
+												</InputOTPGroup>
+												<InputOTPGroup>
+													<InputOTPSlot index={3} />
+													<InputOTPSlot index={4} />
+													<InputOTPSlot index={5} />
+												</InputOTPGroup>
+											</InputOTP>
+											<Button
+												onClick={handleVerifyTotpCode}
+												disabled={isVerifyingTotp || totpCodeInput.length !== 6}
+											>
+												{isVerifyingTotp ? "Verifying..." : "Verify & Complete"}
+											</Button>
+										</div>
+									</div>
+								)}
+
 								<div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900/30">
 									<h3 className="font-semibold text-amber-700 dark:text-amber-400">
 										Save Your Backup Codes
@@ -343,43 +380,6 @@ export function UserSettings() {
 								</div>
 							</div>
 						)}
-
-					{/* TOTP Verification Input Section */}
-					{showTotpVerificationInput && (
-						<div className="p-4 border rounded-md bg-sky-50 dark:bg-sky-900/30 mt-4">
-							<h3 className="font-semibold text-sky-700 dark:text-sky-400">
-								Verify Authenticator App
-							</h3>
-							<p className="text-sm text-sky-600 dark:text-sky-500 mb-3">
-								Enter the 6-digit code from your authenticator app to complete
-								the setup.
-							</p>
-							<div className="flex items-center space-x-2">
-								<InputOTP
-									maxLength={6}
-									value={totpCodeInput}
-									onChange={(value) => setTotpCodeInput(value)}
-								>
-									<InputOTPGroup>
-										<InputOTPSlot index={0} />
-										<InputOTPSlot index={1} />
-										<InputOTPSlot index={2} />
-									</InputOTPGroup>
-									<InputOTPGroup>
-										<InputOTPSlot index={3} />
-										<InputOTPSlot index={4} />
-										<InputOTPSlot index={5} />
-									</InputOTPGroup>
-								</InputOTP>
-								<Button
-									onClick={handleVerifyTotpCode}
-									disabled={isVerifyingTotp || totpCodeInput.length !== 6}
-								>
-									{isVerifyingTotp ? "Verifying..." : "Verify & Complete"}
-								</Button>
-							</div>
-						</div>
-					)}
 				</CardContent>
 			</Card>
 
