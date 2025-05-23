@@ -8,6 +8,7 @@ import AuthLayout from "./app/auth/auth-layout.tsx";
 import SignIn from "./app/auth/sign-in/sign-in.tsx";
 import SignUp from "./app/auth/sign-up/sign-up.tsx";
 import TestRpc from "./app/test-rpc/test-rpc.tsx";
+import UserSettings from "./app/user/user-settings.tsx";
 import { ProtectedRoute } from "./components/protected-route";
 import { PublicRoute } from "./components/public-route";
 
@@ -25,6 +26,15 @@ createRoot(document.getElementById("root")!).render(
 				>
 					<Route index element={<Home />} />
 					<Route path="test-rpc" element={<TestRpc />} />
+				</Route>
+				<Route
+					element={
+						<ProtectedRoute>
+							<MainLayout />
+						</ProtectedRoute>
+					}
+				>
+					<Route path="user" element={<UserSettings />} />
 				</Route>
 				<Route
 					path="auth"

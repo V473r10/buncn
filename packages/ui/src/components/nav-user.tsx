@@ -22,7 +22,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { signOut } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -40,7 +40,7 @@ export function NavUser({
 	const navigate = useNavigate();
 
 	const handleSignOut = async () => {
-		await signOut({
+		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
 					toast.success("Signed out successfully!");
@@ -94,7 +94,7 @@ export function NavUser({
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
+							<DropdownMenuItem onClick={() => navigate("/user")}>
 								<IconUserCircle />
 								Account
 							</DropdownMenuItem>

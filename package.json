@@ -11,7 +11,9 @@
   },
   "trustedDependencies": [
     "@biomejs/biome",
+    "@swc/core",
     "@tailwindcss/oxide",
+    "create-buncn",
     "esbuild"
   ]
 }
