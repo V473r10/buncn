@@ -223,25 +223,6 @@ export function UserSettings() {
 		setIsVerifyingTotp(false);
 	};
 
-	console.log("--- UserSettings Render --- ");
-	console.log("Render time state: isTwoFactorEnabled =", isTwoFactorEnabled);
-	console.log("Render time state: totpURIForQrCode =", totpURIForQrCode);
-	console.log(
-		"Render time state: currentBackupCodes exist =",
-		!!currentBackupCodes && currentBackupCodes.length > 0,
-	);
-	console.log(
-		"Render time state: showTotpVerificationInput =",
-		showTotpVerificationInput,
-	);
-	console.log("Render time state: twoFactorAction =", twoFactorAction);
-	console.log(
-		"Render time state: isPasswordDialogOpen =",
-		isPasswordDialogOpen,
-	);
-	console.log("Render time state: isSubmitting =", isSubmitting);
-	console.log("Render time state: isVerifyingTotp =", isVerifyingTotp);
-
 	return (
 		<div className="space-y-6 p-4 md:p-8">
 			<h1 className="text-2xl font-semibold">User Settings</h1>
