@@ -7,6 +7,7 @@ import "./index.css";
 import { Toaster } from "sonner";
 import AuthLayout from "./app/auth/auth-layout.tsx";
 import SignIn from "./app/auth/sign-in/sign-in.tsx";
+import TwoFactor from "./app/auth/sign-in/two-factor/two-factor.tsx";
 import SignUp from "./app/auth/sign-up/sign-up.tsx";
 import TestRpc from "./app/test-rpc/test-rpc.tsx";
 import UserSettings from "./app/user/user-settings.tsx";
@@ -46,6 +47,7 @@ createRoot(document.getElementById("root")!).render(
 					}
 				>
 					<Route path="sign-in" element={<SignIn />} />
+					<Route path="sign-in/two-factor" element={<TwoFactor />} />
 					<Route path="sign-up" element={<SignUp />} />
 					<Route index element={<Navigate to="sign-in" replace />} />
 				</Route>

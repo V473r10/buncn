@@ -30,12 +30,23 @@ export function SignInForm() {
 		onSubmit: async ({ value }) => {
 			setIsLoading(true);
 			try {
-				await authClient.signIn.email({
-					email: value.email,
-					password: value.password,
-				});
-				toast.success("Signed in successfully!");
-				navigate("/");
+				await authClient.signIn.email(
+					{
+						email: value.email,
+						password: value.password,
+					},
+					{
+						async onSuccess(context) {
+							if (context.data.twoFactorRedirect) {
+								toast.success("Two-factor authentication required!");
+								navigate("/auth/sign-in/two-factor");
+							} else {
+								toast.success("Signed in successfully!");
+								navigate("/");
+							}
+						},
+					},
+				);
 			} catch (err) {
 				const errorMessage =
 					err instanceof Error
