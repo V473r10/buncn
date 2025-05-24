@@ -266,15 +266,9 @@ export function UserSettings() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<div className="flex items-center justify-between">
-						<Label
-							htmlFor="two-factor-switch"
-							className="flex flex-col space-y-1"
-						>
+					<div className="flex items-center space-x-2">
+						<Label htmlFor="two-factor-switch">
 							<span>Enable Two-Factor Authentication</span>
-							<span className="font-normal leading-snug text-muted-foreground">
-								You will be prompted to set up 2FA using an authenticator app.
-							</span>
 						</Label>
 						<Switch
 							id="two-factor-switch"
@@ -283,6 +277,9 @@ export function UserSettings() {
 							disabled={isSubmitting}
 						/>
 					</div>
+					<span className="font-normal leading-snug text-muted-foreground">
+						You will be prompted to set up 2FA using an authenticator app.
+					</span>
 
 					{/* Section to display QR code and recovery codes after successful enablement */}
 					{totpURIForQrCode &&
