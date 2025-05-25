@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -28,6 +26,8 @@ import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
 import { useTRPC } from "@/lib/trpc";
 import { trpcClient } from "@/lib/trpc-client";
+import { useQuery } from "@tanstack/react-query";
+import type { Session, User } from "better-auth";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -41,9 +41,31 @@ interface BetterAuthErrorDetail {
 }
 
 export function UserSettings() {
-	const [username, setUsername] = useState("current_username"); // Replace with actual data
-	const [email, setEmail] = useState("user@example.com"); // Replace with actual data
-	const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false); // Replace with actual data from useSession or API call
+	const trpc = useTRPC();
+	const [session, setSession] = useState({} as Session);
+	const [user, setUser] = useState(
+		{} as ReturnType<typeof authClient.getSession>,
+	);
+	const [username, setUsername] = useState<string>();
+	const [email, setEmail] = useState<string>();
+	const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState<boolean>(false);
+	const [isBackupCodesVisible, setIsBackupCodesVisible] =
+		useState<boolean>(false);
+
+	useEffect(() => {
+		const fetchSession = async () => {
+			const session = await authClient.getSession();
+			if (!session.data) {
+				return;
+			}
+			setSession(session.data.session);
+			setUser(session.data.user);
+			setUsername(session.data.user.name);
+			setEmail(session.data.user.email);
+			setIsTwoFactorEnabled(session.data.user.twoFactorEnabled || false);
+		};
+		fetchSession();
+	}, []);
 
 	const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 	const [passwordInput, setPasswordInput] = useState("");
@@ -64,21 +86,11 @@ export function UserSettings() {
 		useState<boolean>(false);
 	const [isVerifyingTotp, setIsVerifyingTotp] = useState<boolean>(false);
 
-	const trpc = useTRPC();
-
-	// Fetch initial 2FA status (example)
-	useEffect(() => {
-		const fetch2FAStatus = async () => {
-			try {
-				const session = await authClient.getSession(); // Assuming getSession returns { data: { user: { ... } } } or similar
-				setIsTwoFactorEnabled(session?.data?.user?.twoFactorEnabled || false);
-			} catch (error) {
-				console.error("Failed to fetch 2FA status", error);
-				toast.error("Could not load your current 2FA status."); // User feedback
-			}
-		};
-		fetch2FAStatus();
-	}, []);
+	const backupCodesQuery = useQuery(
+		trpc.auth.viewBackupCodes.queryOptions({
+			userId: user.id,
+		}),
+	);
 
 	// Placeholder for the data structure returned on successful 2FA enablement
 	interface TwoFactorEnableSuccessData {
@@ -227,18 +239,17 @@ export function UserSettings() {
 		setIsVerifyingTotp(false);
 	};
 
-	const handleViewBackupCodes = async () => {
-		const session = await authClient.getSession();
-		const userId = session?.data?.user?.id;
-		if (!userId) {
+	const toggleViewBackupCodes = async () => {
+		if (!user.id) {
 			toast.error("Could not load your user ID.");
 			return;
 		}
-		const result = await trpcClient.auth.viewBackupCodes.query({
-			userId,
-		});
-		console.log(result);
-		setCurrentBackupCodes(result);
+		if (!backupCodesQuery.data) {
+			toast.error("Could not load your backup codes.");
+			return;
+		}
+		setCurrentBackupCodes(backupCodesQuery.data);
+		setIsBackupCodesVisible(!isBackupCodesVisible);
 	};
 
 	return (
@@ -361,8 +372,10 @@ export function UserSettings() {
 								</div>
 							</>
 						)}
-
-						{currentBackupCodes && (
+						<Button variant="outline" onClick={toggleViewBackupCodes}>
+							{isBackupCodesVisible ? "Hide Backup Codes" : "View Backup Codes"}
+						</Button>
+						{currentBackupCodes && isBackupCodesVisible && (
 							<div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900/30">
 								<h3 className="font-semibold text-amber-700 dark:text-amber-400">
 									Save Your Backup Codes
@@ -392,9 +405,6 @@ export function UserSettings() {
 								</Button>
 							</div>
 						)}
-						<Button variant="outline" onClick={handleViewBackupCodes}>
-							View Backup Codes
-						</Button>
 					</div>
 				</CardContent>
 			</Card>
