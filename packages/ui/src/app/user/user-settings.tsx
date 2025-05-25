@@ -26,6 +26,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
+import { useTRPC } from "@/lib/trpc";
+import { trpcClient } from "@/lib/trpc-client";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -61,6 +63,8 @@ export function UserSettings() {
 	const [showTotpVerificationInput, setShowTotpVerificationInput] =
 		useState<boolean>(false);
 	const [isVerifyingTotp, setIsVerifyingTotp] = useState<boolean>(false);
+
+	const trpc = useTRPC();
 
 	// Fetch initial 2FA status (example)
 	useEffect(() => {
@@ -223,6 +227,20 @@ export function UserSettings() {
 		setIsVerifyingTotp(false);
 	};
 
+	const handleViewBackupCodes = async () => {
+		const session = await authClient.getSession();
+		const userId = session?.data?.user?.id;
+		if (!userId) {
+			toast.error("Could not load your user ID.");
+			return;
+		}
+		const result = await trpcClient.auth.viewBackupCodes.query({
+			userId,
+		});
+		console.log(result);
+		setCurrentBackupCodes(result);
+	};
+
 	return (
 		<div className="space-y-6 p-4 md:p-8">
 			<h1 className="text-2xl font-semibold">User Settings</h1>
@@ -282,10 +300,9 @@ export function UserSettings() {
 					</span>
 
 					{/* Section to display QR code and recovery codes after successful enablement */}
-					{totpURIForQrCode &&
-						currentBackupCodes &&
-						currentBackupCodes.length > 0 && (
-							<div className="space-y-4 pt-4 border-t">
+					<div className="space-y-4 pt-4 border-t">
+						{totpURIForQrCode && showTotpVerificationInput && (
+							<>
 								<div className="p-4 border rounded-md bg-green-50 dark:bg-green-900/30">
 									<h3 className="font-semibold text-green-700 dark:text-green-400">
 										Complete Your 2FA Setup
@@ -308,75 +325,77 @@ export function UserSettings() {
 								</div>
 
 								{/* TOTP Verification Input Section */}
-								{showTotpVerificationInput && (
-									<div className="p-4 border rounded-md bg-sky-50 dark:bg-sky-900/30 mt-4">
-										<h3 className="font-semibold text-sky-700 dark:text-sky-400">
-											Verify Authenticator App
-										</h3>
-										<p className="text-sm text-sky-600 dark:text-sky-500 mb-3">
-											Enter the 6-digit code from your authenticator app to
-											complete the setup.
-										</p>
-										<div className="flex items-center space-x-2">
-											<InputOTP
-												maxLength={6}
-												value={totpCodeInput}
-												onChange={(value) => setTotpCodeInput(value)}
-											>
-												<InputOTPGroup>
-													<InputOTPSlot index={0} />
-													<InputOTPSlot index={1} />
-													<InputOTPSlot index={2} />
-												</InputOTPGroup>
-												<InputOTPGroup>
-													<InputOTPSlot index={3} />
-													<InputOTPSlot index={4} />
-													<InputOTPSlot index={5} />
-												</InputOTPGroup>
-											</InputOTP>
-											<Button
-												onClick={handleVerifyTotpCode}
-												disabled={isVerifyingTotp || totpCodeInput.length !== 6}
-											>
-												{isVerifyingTotp ? "Verifying..." : "Verify & Complete"}
-											</Button>
-										</div>
-									</div>
-								)}
 
-								<div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900/30">
-									<h3 className="font-semibold text-amber-700 dark:text-amber-400">
-										Save Your Backup Codes
+								<div className="p-4 border rounded-md bg-sky-50 dark:bg-sky-900/30 mt-4">
+									<h3 className="font-semibold text-sky-700 dark:text-sky-400">
+										Verify Authenticator App
 									</h3>
-									<p className="text-sm text-amber-600 dark:text-amber-500 mb-2">
-										Store these backup codes in a safe place. They can be used
-										to access your account if you lose access to your 2FA
-										device.
+									<p className="text-sm text-sky-600 dark:text-sky-500 mb-3">
+										Enter the 6-digit code from your authenticator app to
+										complete the setup.
 									</p>
-									<div className="p-2 border rounded bg-slate-100 dark:bg-slate-800 space-y-1">
-										{currentBackupCodes.map((code) => (
-											<pre
-												key={code}
-												className="text-sm font-mono p-1 bg-white dark:bg-slate-700 rounded"
-											>
-												{code}
-											</pre>
-										))}
+									<div className="flex items-center space-x-2">
+										<InputOTP
+											maxLength={6}
+											value={totpCodeInput}
+											onChange={(value) => setTotpCodeInput(value)}
+										>
+											<InputOTPGroup>
+												<InputOTPSlot index={0} />
+												<InputOTPSlot index={1} />
+												<InputOTPSlot index={2} />
+											</InputOTPGroup>
+											<InputOTPGroup>
+												<InputOTPSlot index={3} />
+												<InputOTPSlot index={4} />
+												<InputOTPSlot index={5} />
+											</InputOTPGroup>
+										</InputOTP>
+										<Button
+											onClick={handleVerifyTotpCode}
+											disabled={isVerifyingTotp || totpCodeInput.length !== 6}
+										>
+											{isVerifyingTotp ? "Verifying..." : "Verify & Complete"}
+										</Button>
 									</div>
-									<Button
-										variant="outline"
-										className="mt-3"
-										onClick={() =>
-											navigator.clipboard.writeText(
-												currentBackupCodes.join("\n"),
-											)
-										}
-									>
-										Copy Codes
-									</Button>
 								</div>
+							</>
+						)}
+
+						{currentBackupCodes && (
+							<div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900/30">
+								<h3 className="font-semibold text-amber-700 dark:text-amber-400">
+									Save Your Backup Codes
+								</h3>
+								<p className="text-sm text-amber-600 dark:text-amber-500 mb-2">
+									Store these backup codes in a safe place. They can be used to
+									access your account if you lose access to your 2FA device.
+								</p>
+								<div className="p-2 border rounded bg-slate-100 dark:bg-slate-800 space-y-1">
+									{currentBackupCodes.map((code) => (
+										<pre
+											key={code}
+											className="text-sm font-mono p-1 bg-white dark:bg-slate-700 rounded"
+										>
+											{code}
+										</pre>
+									))}
+								</div>
+								<Button
+									variant="outline"
+									className="mt-3"
+									onClick={() =>
+										navigator.clipboard.writeText(currentBackupCodes.join("\n"))
+									}
+								>
+									Copy Codes
+								</Button>
 							</div>
 						)}
+						<Button variant="outline" onClick={handleViewBackupCodes}>
+							View Backup Codes
+						</Button>
+					</div>
 				</CardContent>
 			</Card>
 

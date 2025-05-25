@@ -3,9 +3,12 @@
  */
 import { z } from "zod";
 import { db } from "../dummy-data.js";
+import { authRouter } from "./auth.js";
 import { publicProcedure, router } from "./trpc.js";
 
 export const appRouter = router({
+	// Auth
+	auth: authRouter,
 	userList: publicProcedure.query(async () => {
 		// Retrieve users from a datasource, this is an imaginary database
 		const users = await db.user.findMany();
