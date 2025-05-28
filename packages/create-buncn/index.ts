@@ -1,9 +1,10 @@
+#!/usr/bin/env bun
 import * as p from "@clack/prompts";
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-import { promisify } from 'util';
-import { exec } from 'child_process';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
+import { exec } from 'node:child_process';
 
 const execAsync = promisify(exec);
 
@@ -124,7 +125,7 @@ async function createProjectStructure(projectDir: string, config: ProjectConfig)
     
     await fs.writeFile(
       packageJsonPath,
-      JSON.stringify(packageJson, null, 2) + '\n',
+      `${JSON.stringify(packageJson, null, 2)}\n`,
       'utf-8'
     );
 
@@ -187,12 +188,12 @@ async function installDependencies(projectDir: string, config: ProjectConfig) {
       );
       
       if (packageJson.workspaces.length === 0) {
-        delete packageJson.workspaces;
+        packageJson.workspaces = undefined;
       }
       
       await fs.writeFile(
         packageJsonPath,
-        JSON.stringify(packageJson, null, 2) + '\n',
+        `${JSON.stringify(packageJson, null, 2)}\n`,
         'utf-8'
       );
     }

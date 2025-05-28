@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node ./scripts/postbuild.js",
     "dev": "bun run build && bun run start",
     "start": "bun run build && node dist/index.js",
     "prepare": "bun run build",
