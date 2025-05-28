@@ -12,10 +12,6 @@ jobs:
   publish:
     name: Publish to NPM
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,16 +22,6 @@ jobs:
           node-version: '20' # Or your preferred Node.js version
           registry-url: 'https://registry.npmjs.org/'
 
-      - name: Display npm configuration
-        run: |
-          echo "NPM registry from config: $(npm config get registry)"
-          echo "User .npmrc content (if any):"
-          cat ~/.npmrc || echo "~/.npmrc not found"
-          echo "Project .npmrc content (if any in GITHUB_WORKSPACE):"
-          cat .npmrc || echo "./.npmrc not found in GITHUB_WORKSPACE"
-          echo "Package .npmrc content (if any in packages/create-buncn):"
-          cat packages/create-buncn/.npmrc || echo "./packages/create-buncn/.npmrc not found"
-
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
         with:
@@ -43,15 +29,13 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./packages/create-buncn
-        run: bun install --frozen-lockfile --verbose
+        run: bun install --frozen-lockfile
 
       - name: Build package
         # This step assumes you have a 'build' script in packages/create-buncn/package.json
         # If not, you can remove or modify this step.
         working-directory: ./packages/create-buncn
-        # The 'build' script in package.json is "tsc".
-        # We pass -- --traceResolution to send this flag to the tsc command.
-        run: bun run build -- --traceResolution
+        run: bun run build
 
       - name: Publish to NPM
         working-directory: ./packages/create-buncn
