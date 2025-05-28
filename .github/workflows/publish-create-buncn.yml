@@ -1,0 +1,48 @@
+name: Publish create-buncn Package
+
+on:
+  push:
+    branches:
+      - main # Consider changing if your default branch is different (e.g., master)
+    paths:
+      - 'packages/create-buncn/**'
+      - '.github/workflows/publish-create-buncn.yml' # Re-run if workflow itself changes
+
+jobs:
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your preferred Node.js version
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest # Or a specific Bun version
+
+      - name: Install dependencies
+        working-directory: ./packages/create-buncn
+        run: bun install --frozen-lockfile
+
+      - name: Build package
+        # This step assumes you have a 'build' script in packages/create-buncn/package.json
+        # If not, you can remove or modify this step.
+        working-directory: ./packages/create-buncn
+        run: bun run build
+
+      - name: Publish to NPM
+        working-directory: ./packages/create-buncn
+        run: bun publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
