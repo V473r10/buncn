@@ -14,7 +14,7 @@
       "@/*": [
         "./src/*"
       ],
-      "@buncn/api/*": ["../api/src/*"]
+      "@buncn/api/*": ["../../apps/api/src/*"]
     },
     "strictNullChecks": true
   }

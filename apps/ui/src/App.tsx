@@ -8,9 +8,9 @@ import SignUp from "./app/auth/sign-up/sign-up.tsx";
 import Home from "./app/home/home.tsx";
 import TestRpc from "./app/test-rpc/test-rpc.tsx";
 import UserSettings from "./app/user/user-settings.tsx";
-import { MainLayout } from "./components/main-layout";
-import { ProtectedRoute } from "./components/protected-route";
-import { PublicRoute } from "./components/public-route";
+import { MainLayout } from "./components/main-layout.tsx";
+import { ProtectedRoute } from "./components/protected-route.tsx";
+import { PublicRoute } from "./components/public-route.tsx";
 import { trpcClient } from "./lib/trpc-client.ts";
 import { TRPCProvider } from "./lib/trpc.ts";
 
