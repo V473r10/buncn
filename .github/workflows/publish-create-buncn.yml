@@ -5,7 +5,7 @@ on:
     branches:
       - main # Consider changing if your default branch is different (e.g., master)
     paths:
-      - 'packages/create-buncn/**'
+      - 'scripts/create-buncn/**'
       - '.github/workflows/publish-create-buncn.yml' # Re-run if workflow itself changes
 
 jobs:
@@ -28,17 +28,17 @@ jobs:
           bun-version: latest # Or a specific Bun version
 
       - name: Install dependencies
-        working-directory: ./packages/create-buncn
+        working-directory: ./scripts/create-buncn
         run: bun install --frozen-lockfile
 
       - name: Build package
         # This step assumes you have a 'build' script in packages/create-buncn/package.json
         # If not, you can remove or modify this step.
-        working-directory: ./packages/create-buncn
+        working-directory: ./scripts/create-buncn
         run: bun run build
 
       - name: Publish to NPM
-        working-directory: ./packages/create-buncn
+        working-directory: ./scripts/create-buncn
         run: bun publish --access public
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
