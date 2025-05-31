@@ -12,17 +12,17 @@
 To create a new Buncn project, run:
 
 ```bash
-bun create buncn <your-project-name>
+bun create buncn
 ```
 
 Or, using `bunx`
 
 ```bash
-bunx create-buncn <your-project-name>
+bunx create-buncn
 ```
 
 The script will then guide you through a few configuration steps:
-- **Project name**: The name of your new project (e.g., `my-awesome-app`).
+- **Project name**: The name of your new project.
 - **Project description**: A brief description for your project.
 - **Initialize Git repository?**: Choose whether to initialize a new Git repository.
 - **Install dependencies?**: Choose whether to automatically install dependencies using `bun install`.
