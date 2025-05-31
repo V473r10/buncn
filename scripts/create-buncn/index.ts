@@ -2,6 +2,7 @@
 import * as p from "@clack/prompts";
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
+import * as os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { exec } from 'node:child_process';
@@ -101,6 +102,8 @@ async function getProjectConfig(): Promise<ProjectConfig> {
 }
 
 async function createProjectStructure(projectDir: string, config: ProjectConfig) {
+  const templateRepoUrl = 'https://github.com/V473r10/buncn.git'; // Please confirm/update this URL
+  let tempDir = '';
   const spinner = p.spinner();
   spinner.start('Creating project structure');
 
@@ -108,11 +111,16 @@ async function createProjectStructure(projectDir: string, config: ProjectConfig)
     // Create project directory
     await fs.mkdir(projectDir, { recursive: true });
 
-    // Copy template files (excluding create-buncn directory)
-    const templateDir = path.join(__dirname, '../../');
-    const excludeDirs = ['node_modules', '.git', 'packages/create-buncn', 'dist'];
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'buncn-template-'));
+    spinner.message(`Cloning template from ${templateRepoUrl}...`);
+    await execAsync(`git clone --depth 1 ${templateRepoUrl} ${tempDir}`);
+    spinner.message('Copying project files...');
+
+    // Define exclusions relative to the root of the cloned template
+    // Add any other files/dirs from your repo's root that shouldn't be in new projects
+    const excludeDirs = ['.git', 'node_modules', 'scripts/create-buncn', '.github', /* e.g., 'docs' */]; 
     
-    await copyDir(templateDir, projectDir, excludeDirs, config);
+    await copyDir(tempDir, projectDir, excludeDirs, config);
 
     // Update package.json with project info
     const packageJsonPath = path.join(projectDir, 'package.json');
@@ -133,6 +141,10 @@ async function createProjectStructure(projectDir: string, config: ProjectConfig)
   } catch (error) {
     spinner.stop('Failed to create project structure');
     throw error;
+  } finally {
+    if (tempDir) {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
   }
 }
 
