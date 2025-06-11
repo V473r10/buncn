@@ -4,8 +4,7 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "scripts/*",
-    "docs/*"
+    "scripts/*"
   ],
   "scripts": {
     "build": "cd apps/api && bun run build & cd apps/ui && bun run build",
