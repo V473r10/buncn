@@ -1,0 +1,41 @@
+---
+title: Start Building
+description: Start Building
+---
+
+## Prerequisites
+
+- [Bun](https://bun.sh)
+- [Git](https://git-scm.com)
+- [PostgreSQL](https://www.postgresql.org) - I recommend using Docker, but it's up to you.
+
+
+## Initialize your project
+
+```bash
+bun create buncn
+```
+
+## Setup environment variables
+
+```bash
+cd {project_name}
+cp apps/api/.env.example apps/api/.env
+```
+
+Edit the `apps/api/.env` file to match your environment.
+
+## Setup database
+
+After setting up your environment variables, pointing DATABASE_URL to your <strong className="font-bold">existing PostgreSQL database</strong>, you can migrate your database:
+
+```bash
+bun run migrate
+```
+
+Executing this command in the project root will navigate to the apps/api directory and run the same command there.
+
+There, it will run the Better Auth generation script to ./src/db/auth.schema.ts and then run the Drizzle push command to create the tables in your database.
+
+
+
