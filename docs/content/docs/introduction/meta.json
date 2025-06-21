@@ -1,0 +1,6 @@
+{
+    "title": "Introduction",
+    "icon": "Book",
+    "pages": ["index", "start-building"],
+    "defaultOpen": true
+}
