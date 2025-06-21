@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppForm } from "@/components/ui/tanstack-form";
@@ -8,34 +9,36 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const passwordSchema = z
+const passwordSchema = (t: (key: string) => string) => z
 	.string()
-	.min(8, { message: "Password must be at least 8 characters" })
-	.regex(/[A-Z]/, { message: "Must contain at least one uppercase letter" })
-	.regex(/[a-z]/, { message: "Must contain at least one lowercase letter" })
-	.regex(/[0-9]/, { message: "Must contain at least one number" })
+	.min(8, { message: t("Password must be at least 8 characters") })
+	.regex(/[A-Z]/, { message: t("Must contain at least one uppercase letter") })
+	.regex(/[a-z]/, { message: t("Must contain at least one lowercase letter") })
+	.regex(/[0-9]/, { message: t("Must contain at least one number") })
 	.regex(/[^A-Za-z0-9]/, {
-		message: "Must contain at least one special character",
+		message: t("Must contain at least one special character"),
 	});
 
-const FormSchema = z
+const getFormSchema = (t: (key: string) => string) => z
 	.object({
 		name: z.string().min(2, {
-			message: "Name must be at least 2 characters.",
+			message: t("Name must be at least 2 characters."),
 		}),
 		email: z.string().email({
-			message: "Please enter a valid email address.",
+			message: t("Please enter a valid email address."),
 		}),
-		password: passwordSchema,
+		password: passwordSchema(t),
 		confirmPassword: z.string(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords don't match",
+		message: t("Passwords don't match"),
 		path: ["confirmPassword"],
 	});
 
 export function SignUpForm() {
+	const { t } = useTranslation();
 	const [isLoading, setIsLoading] = useState(false);
+	const FormSchema = getFormSchema(t);
 	const navigate = useNavigate();
 
 	const form = useAppForm({
@@ -54,13 +57,13 @@ export function SignUpForm() {
 					email: value.email,
 					password: value.password,
 				});
-				toast.success("Account created successfully!");
+				toast.success(t("Account created successfully!"));
 				navigate("/");
 			} catch (err) {
 				const errorMessage =
 					err instanceof Error
 						? err.message
-						: "Failed to create account. Please try again.";
+						: t("Failed to create account. Please try again.");
 				toast.error(errorMessage);
 				console.error("Sign up failed:", err);
 			} finally {
@@ -84,10 +87,10 @@ export function SignUpForm() {
 				<form.AppField name="name">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>Full Name</field.FormLabel>
+							<field.FormLabel>{t("Full Name")}</field.FormLabel>
 							<field.FormControl>
 								<Input
-									placeholder="John Doe"
+									placeholder={t("John Doe")}
 									autoComplete="name"
 									disabled={isLoading}
 									value={field.state.value}
@@ -103,10 +106,10 @@ export function SignUpForm() {
 				<form.AppField name="email">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>Email</field.FormLabel>
+							<field.FormLabel>{t("Email")}</field.FormLabel>
 							<field.FormControl>
 								<Input
-									placeholder="name@example.com"
+									placeholder={t("name@example.com")}
 									type="email"
 									autoCapitalize="none"
 									autoComplete="email"
@@ -127,7 +130,7 @@ export function SignUpForm() {
 						const value = field.state.value || "";
 						return (
 							<field.FormItem>
-								<field.FormLabel>Password</field.FormLabel>
+								<field.FormLabel>{t("Password")}</field.FormLabel>
 								<field.FormControl>
 									<Input
 										type="password"
@@ -140,26 +143,26 @@ export function SignUpForm() {
 								</field.FormControl>
 								<field.FormMessage />
 								<div className="mt-1 text-xs text-muted-foreground">
-									<p>Password must contain:</p>
+									<p>{t("Password must contain:")}</p>
 									<ul className="list-inside list-disc">
 										<li className={value.length >= 8 ? "text-green-500" : ""}>
-											At least 8 characters
+											{t("At least 8 characters")}
 										</li>
 										<li className={/[A-Z]/.test(value) ? "text-green-500" : ""}>
-											At least one uppercase letter
+											{t("At least one uppercase letter")}
 										</li>
 										<li className={/[a-z]/.test(value) ? "text-green-500" : ""}>
-											At least one lowercase letter
+											{t("At least one lowercase letter")}
 										</li>
 										<li className={/[0-9]/.test(value) ? "text-green-500" : ""}>
-											At least one number
+											{t("At least one number")}
 										</li>
 										<li
 											className={
 												/[^A-Za-z0-9]/.test(value) ? "text-green-500" : ""
 											}
 										>
-											At least one special character
+											{t("At least one special character")}
 										</li>
 									</ul>
 								</div>
@@ -171,7 +174,7 @@ export function SignUpForm() {
 				<form.AppField name="confirmPassword">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>Confirm Password</field.FormLabel>
+							<field.FormLabel>{t("Confirm Password")}</field.FormLabel>
 							<field.FormControl>
 								<Input
 									type="password"
@@ -189,7 +192,7 @@ export function SignUpForm() {
 
 				<Button type="submit" className="w-full" disabled={isLoading}>
 					{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-					Create Account
+					{t("Create Account")}
 				</Button>
 			</form>
 		</form.AppForm>
