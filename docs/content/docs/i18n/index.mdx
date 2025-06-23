@@ -11,9 +11,38 @@ Buncn comes with a seamlessly integrated internationalization system built on to
 
 The i18next configuration is located in `apps/ui/src/lib/i18n/i18n.ts`.
 
+```ts
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import en from "./locales/en.json";
+import es from "./locales/es.json";
+// Import more locales here if you want to
+
+i18n.use(initReactI18next).init({
+	resources: {
+		en: {
+			translation: en,
+		},
+		es: {
+			translation: es,
+		},
+		// Declare them here following the same pattern
+	},
+	lng: "en",
+	fallbackLng: "en",
+	interpolation: {
+		escapeValue: false,
+	},
+});
+```
+
 The translations are located in `apps/ui/src/lib/i18n/locales`.
 
+I've added english and spanish translations for the existing components, to give you an idea how you can structure your own translations based on context.
+
 ## Usage
+
+In functional components you have to use the `useTranslation` hook from `react-i18next`.
 
 ```tsx
 import { useTranslation } from "react-i18next";
@@ -21,5 +50,27 @@ import { useTranslation } from "react-i18next";
 function MyComponent() {
   const { t } = useTranslation();
   return <div>{t("Hello")}</div>;
+}
+```
+
+If you want to segregate the translations by context, the simplest way, AFAIK, is to put them in separate objects and destructure them on usage.
+
+```json
+{
+  "auth": {
+    "signIn": {
+      "title": "Sign In"
+    }
+  }
+}
+```
+
+```tsx
+import { useTranslation } from "react-i18next";
+
+function MyComponent() {
+  const { t } = useTranslation();
+  // Access to the properties by address
+  return <div>{t("auth.signIn.title")}</div>;
 }
 ```
