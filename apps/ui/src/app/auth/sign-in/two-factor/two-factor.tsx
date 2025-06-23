@@ -8,6 +8,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -29,6 +30,7 @@ const extractAuthErrorMessage = (result: unknown): string => {
 };
 
 const TwoFactor = () => {
+	const { t } = useTranslation();
 	const [otp, setOtp] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
@@ -65,10 +67,10 @@ const TwoFactor = () => {
 		<div className="flex flex-col items-center justify-center space-y-6 pt-8">
 			<div className="text-center">
 				<h1 className="text-2xl font-semibold tracking-tight">
-					Two-Factor Authentication
+					{t("auth.signIn.twoFactor.title")}
 				</h1>
 				<p className="text-sm text-muted-foreground">
-					Enter the code from your authenticator app.
+					{t("auth.signIn.twoFactor.description")}
 				</p>
 			</div>
 			<form className="space-y-4 w-full max-w-xs" onSubmit={handleOtpSubmit}>
@@ -97,7 +99,7 @@ const TwoFactor = () => {
 					disabled={isLoading || otp.length !== 6}
 				>
 					{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-					Verify Code
+					{t("auth.signIn.twoFactor.button")}
 				</Button>
 			</form>
 			<Button
@@ -106,7 +108,7 @@ const TwoFactor = () => {
 				onClick={() => navigate("/auth/sign-in")}
 				disabled={isLoading}
 			>
-				Back to Sign In
+				{t("auth.signIn.backToSignIn")}
 			</Button>
 		</div>
 	);

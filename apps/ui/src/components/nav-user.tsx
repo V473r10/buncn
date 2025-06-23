@@ -1,6 +1,7 @@
 import {
 	IconCreditCard,
 	IconDotsVertical,
+	IconLanguage,
 	IconLogout,
 	IconNotification,
 	IconUserCircle,
@@ -13,7 +14,11 @@ import {
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
+	DropdownMenuPortal,
 	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -23,6 +28,7 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -35,6 +41,7 @@ export function NavUser({
 		avatar: string;
 	};
 }) {
+	const { t, i18n } = useTranslation();
 	const { isMobile } = useSidebar();
 
 	const navigate = useNavigate();
@@ -96,21 +103,38 @@ export function NavUser({
 						<DropdownMenuGroup>
 							<DropdownMenuItem onClick={() => navigate("/user")}>
 								<IconUserCircle />
-								Account
+								{t("sidebar.userMenu.account")}
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<IconCreditCard />
-								Billing
+								{t("sidebar.userMenu.billing")}
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<IconNotification />
-								Notifications
+								{t("sidebar.userMenu.notifications")}
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>
+								<IconLanguage />
+								{t("sidebar.userMenu.language")}
+							</DropdownMenuSubTrigger>
+							<DropdownMenuPortal>
+								<DropdownMenuSubContent>
+									<DropdownMenuItem onClick={() => i18n.changeLanguage("en")}>
+										English
+									</DropdownMenuItem>
+									<DropdownMenuItem onClick={() => i18n.changeLanguage("es")}>
+										Español
+									</DropdownMenuItem>
+								</DropdownMenuSubContent>
+							</DropdownMenuPortal>
+						</DropdownMenuSub>
+						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={handleSignOut}>
 							<IconLogout />
-							Log out
+							{t("sidebar.userMenu.signOut")}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

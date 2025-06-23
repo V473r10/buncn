@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
+import AccountSettings from "./app/account/account-settings.tsx";
 import AuthLayout from "./app/auth/auth-layout.tsx";
 import SignIn from "./app/auth/sign-in/sign-in.tsx";
 import TwoFactor from "./app/auth/sign-in/two-factor/two-factor.tsx";
 import SignUp from "./app/auth/sign-up/sign-up.tsx";
 import Home from "./app/home/home.tsx";
 import TestRpc from "./app/test-rpc/test-rpc.tsx";
-import UserSettings from "./app/user/user-settings.tsx";
 import { MainLayout } from "./components/main-layout.tsx";
 import { ProtectedRoute } from "./components/protected-route.tsx";
 import { PublicRoute } from "./components/public-route.tsx";
@@ -64,7 +64,7 @@ function App() {
 									</ProtectedRoute>
 								}
 							>
-								<Route path="user" element={<UserSettings />} />
+								<Route path="user" element={<AccountSettings />} />
 							</Route>
 							<Route
 								path="auth"

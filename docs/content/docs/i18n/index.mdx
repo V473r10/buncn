@@ -1,0 +1,25 @@
+---
+title: Internationalization
+description: Internationalization
+---
+
+## Introduction
+
+Buncn comes with a seamlessly integrated internationalization system built on top of [i18next](https://i18next.com).
+
+## Configuration
+
+The i18next configuration is located in `apps/ui/src/lib/i18n/i18n.ts`.
+
+The translations are located in `apps/ui/src/lib/i18n/locales`.
+
+## Usage
+
+```tsx
+import { useTranslation } from "react-i18next";
+
+function MyComponent() {
+  const { t } = useTranslation();
+  return <div>{t("Hello")}</div>;
+}
+```

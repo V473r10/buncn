@@ -4,6 +4,7 @@ import { useAppForm } from "@/components/ui/tanstack-form";
 import { authClient } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -18,6 +19,7 @@ const FormSchema = z.object({
 });
 
 export function SignInForm() {
+	const { t } = useTranslation();
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 
@@ -75,7 +77,7 @@ export function SignInForm() {
 				<form.AppField name="email">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>Email</field.FormLabel>
+							<field.FormLabel>{t("auth.signIn.form.email")}</field.FormLabel>
 							<field.FormControl>
 								<Input
 									placeholder="name@example.com"
@@ -98,14 +100,16 @@ export function SignInForm() {
 					{(field) => (
 						<field.FormItem>
 							<div className="flex items-center justify-between">
-								<field.FormLabel>Password</field.FormLabel>
+								<field.FormLabel>
+									{t("auth.signIn.form.password")}
+								</field.FormLabel>
 								<Button
 									variant="link"
 									className="h-auto p-0 text-xs text-muted-foreground"
 									asChild
 								>
 									<Link to="/auth/reset-password" className="hover:underline">
-										Forgot password?
+										{t("auth.signIn.form.forgotPassword")}
 									</Link>
 								</Button>
 							</div>
@@ -126,7 +130,7 @@ export function SignInForm() {
 
 				<Button type="submit" className="w-full" disabled={isLoading}>
 					{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-					Sign In
+					{t("auth.signIn.form.button")}
 				</Button>
 			</form>
 		</form.AppForm>

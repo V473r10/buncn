@@ -11,27 +11,27 @@ import { z } from "zod";
 
 const passwordSchema = (t: (key: string) => string) => z
 	.string()
-	.min(8, { message: t("Password must be at least 8 characters") })
-	.regex(/[A-Z]/, { message: t("Must contain at least one uppercase letter") })
-	.regex(/[a-z]/, { message: t("Must contain at least one lowercase letter") })
-	.regex(/[0-9]/, { message: t("Must contain at least one number") })
+	.min(8, { message: t("validation.password.length") })
+	.regex(/[A-Z]/, { message: t("validation.password.uppercase") })
+	.regex(/[a-z]/, { message: t("validation.password.lowercase") })
+	.regex(/[0-9]/, { message: t("validation.password.number") })
 	.regex(/[^A-Za-z0-9]/, {
-		message: t("Must contain at least one special character"),
+		message: t("validation.password.special"),
 	});
 
 const getFormSchema = (t: (key: string) => string) => z
 	.object({
 		name: z.string().min(2, {
-			message: t("Name must be at least 2 characters."),
+			message: t("validation.name.length"),
 		}),
 		email: z.string().email({
-			message: t("Please enter a valid email address."),
+			message: t("validation.email.invalid"),
 		}),
 		password: passwordSchema(t),
 		confirmPassword: z.string(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
-		message: t("Passwords don't match"),
+		message: t("validation.confirmPassword.match"),
 		path: ["confirmPassword"],
 	});
 
@@ -57,13 +57,13 @@ export function SignUpForm() {
 					email: value.email,
 					password: value.password,
 				});
-				toast.success(t("Account created successfully!"));
+				toast.success(t("notifications.account.created"));
 				navigate("/");
 			} catch (err) {
 				const errorMessage =
 					err instanceof Error
 						? err.message
-						: t("Failed to create account. Please try again.");
+						: t("notifications.account.creationFailed");
 				toast.error(errorMessage);
 				console.error("Sign up failed:", err);
 			} finally {
@@ -87,10 +87,10 @@ export function SignUpForm() {
 				<form.AppField name="name">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>{t("Full Name")}</field.FormLabel>
+							<field.FormLabel>{t("form.fullName.label")}</field.FormLabel>
 							<field.FormControl>
 								<Input
-									placeholder={t("John Doe")}
+									placeholder={t("form.fullName.placeholder")}
 									autoComplete="name"
 									disabled={isLoading}
 									value={field.state.value}
@@ -106,10 +106,10 @@ export function SignUpForm() {
 				<form.AppField name="email">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>{t("Email")}</field.FormLabel>
+							<field.FormLabel>{t("form.email.label")}</field.FormLabel>
 							<field.FormControl>
 								<Input
-									placeholder={t("name@example.com")}
+									placeholder={t("form.email.placeholder")}
 									type="email"
 									autoCapitalize="none"
 									autoComplete="email"
@@ -130,7 +130,7 @@ export function SignUpForm() {
 						const value = field.state.value || "";
 						return (
 							<field.FormItem>
-								<field.FormLabel>{t("Password")}</field.FormLabel>
+								<field.FormLabel>{t("form.password.label")}</field.FormLabel>
 								<field.FormControl>
 									<Input
 										type="password"
@@ -142,30 +142,16 @@ export function SignUpForm() {
 									/>
 								</field.FormControl>
 								<field.FormMessage />
-								<div className="mt-1 text-xs text-muted-foreground">
-									<p>{t("Password must contain:")}</p>
-									<ul className="list-inside list-disc">
-										<li className={value.length >= 8 ? "text-green-500" : ""}>
-											{t("At least 8 characters")}
-										</li>
-										<li className={/[A-Z]/.test(value) ? "text-green-500" : ""}>
-											{t("At least one uppercase letter")}
-										</li>
-										<li className={/[a-z]/.test(value) ? "text-green-500" : ""}>
-											{t("At least one lowercase letter")}
-										</li>
-										<li className={/[0-9]/.test(value) ? "text-green-500" : ""}>
-											{t("At least one number")}
-										</li>
-										<li
-											className={
-												/[^A-Za-z0-9]/.test(value) ? "text-green-500" : ""
-											}
-										>
-											{t("At least one special character")}
-										</li>
-									</ul>
-								</div>
+								<p className="text-sm font-medium text-destructive">
+									{t("form.password.mustContain")}
+								</p>
+								<ul className="text-sm text-muted-foreground list-disc pl-4 space-y-1">
+									<li>{t("form.password.requirements.length")}</li>
+									<li>{t("form.password.requirements.uppercase")}</li>
+									<li>{t("form.password.requirements.lowercase")}</li>
+									<li>{t("form.password.requirements.number")}</li>
+									<li>{t("form.password.requirements.special")}</li>
+								</ul>
 							</field.FormItem>
 						);
 					}}
@@ -174,7 +160,7 @@ export function SignUpForm() {
 				<form.AppField name="confirmPassword">
 					{(field) => (
 						<field.FormItem>
-							<field.FormLabel>{t("Confirm Password")}</field.FormLabel>
+							<field.FormLabel>{t("form.confirmPassword.label")}</field.FormLabel>
 							<field.FormControl>
 								<Input
 									type="password"
@@ -192,7 +178,7 @@ export function SignUpForm() {
 
 				<Button type="submit" className="w-full" disabled={isLoading}>
 					{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-					{t("Create Account")}
+					{t("form.createAccountButton")}
 				</Button>
 			</form>
 		</form.AppForm>
