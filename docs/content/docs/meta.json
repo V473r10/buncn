@@ -1,6 +1,7 @@
 {
     "pages": [
       "introduction",
-      "auth"
+      "auth",
+      "i18n"
     ]
 }

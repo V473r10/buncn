@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslation } from "react-i18next"
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
@@ -13,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -126,21 +127,24 @@ const chartData = [
   { date: "2024-06-30", desktop: 446, mobile: 400 },
 ]
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
-  },
-} satisfies ChartConfig
+
 
 export function ChartAreaInteractive() {
+  const { t } = useTranslation()
+
+  const chartConfig = {
+    visitors: {
+      label: t("dashboard.chart.visitors"),
+    },
+    desktop: {
+      label: t("dashboard.chart.desktop"),
+      color: "var(--primary)",
+    },
+    mobile: {
+      label: t("dashboard.chart.mobile"),
+      color: "var(--primary)",
+    },
+  } satisfies ChartConfig
   const isMobile = useIsMobile()
   const [timeRange, setTimeRange] = React.useState("90d")
 
@@ -149,6 +153,16 @@ export function ChartAreaInteractive() {
       setTimeRange("7d")
     }
   }, [isMobile])
+
+  const activeRangeLabel = React.useMemo(
+    () =>
+      ({
+        "90d": t("dashboard.chart.last3Months"),
+        "30d": t("dashboard.chart.last30Days"),
+        "7d": t("dashboard.chart.last7Days"),
+      })[timeRange],
+    [timeRange, t]
+  )
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
@@ -167,12 +181,12 @@ export function ChartAreaInteractive() {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
+        <CardTitle>{t("dashboard.chart.title")}</CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">
-            Total for the last 3 months
+          <span className="hidden @[540px]/card:inline-block">
+            {t("dashboard.chart.showingTotalVisitors")} {activeRangeLabel}
           </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
+          <span className="@[540px]/card:hidden">{t("dashboard.chart.last3Months")}</span>
         </CardDescription>
         <CardAction>
           <ToggleGroup
@@ -182,27 +196,27 @@ export function ChartAreaInteractive() {
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            <ToggleGroupItem value="90d">{t("dashboard.chart.last3Months")}</ToggleGroupItem>
+            <ToggleGroupItem value="30d">{t("dashboard.chart.last30Days")}</ToggleGroupItem>
+            <ToggleGroupItem value="7d">{t("dashboard.chart.last7Days")}</ToggleGroupItem>
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
               className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
               size="sm"
-              aria-label="Select a value"
+              aria-label={t("dashboard.chart.title")}
             >
-              <SelectValue placeholder="Last 3 months" />
+              <SelectValue placeholder={t("dashboard.chart.last3Months")} />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
               <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
+                {t("dashboard.chart.last3Months")}
               </SelectItem>
               <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
+                {t("dashboard.chart.last30Days")}
               </SelectItem>
               <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
+                {t("dashboard.chart.last7Days")}
               </SelectItem>
             </SelectContent>
           </Select>

@@ -1,16 +1,16 @@
-import { KeyRound, DatabaseZap, CreditCard, Globe } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import {
 	Card,
-	CardHeader,
-	CardTitle,
-	CardDescription,
 	CardAction,
 	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from "@/components/ui/card";
+import { CreditCard, DatabaseZap, Globe, KeyRound } from "lucide-react";
 import BetterAuth from "./icons/better-auth";
 import Hono from "./icons/hono";
 import Polar from "./icons/polar";
-import { Badge } from "@/components/ui/badge";
 
 interface Feature {
 	title: string;
@@ -33,6 +33,12 @@ const features: Feature[] = [
 		description: "Reusable, extensible and type-safe REST-API for your app.",
 		icon: <Hono className="h-8 w-8" />,
 		link: "/docs/api",
+	},
+	{
+		title: "Internatinalization",
+		description: "Translate your app to multiple languages.",
+		icon: <Globe className="h-8 w-8" />,
+		link: "/docs/i18n",
 	},
 	{
 		title: "Payments",

@@ -30,6 +30,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const data = {
@@ -40,34 +41,34 @@ const data = {
 	},
 	navMain: [
 		{
-			title: "Dashboard",
+			title: "sidebar.dashboard",
 			url: "#",
 			icon: IconDashboard,
 		},
 		{
-			title: "Lifecycle",
+			title: "sidebar.lifecycle",
 			url: "#",
 			icon: IconListDetails,
 		},
 		{
-			title: "Analytics",
+			title: "sidebar.analytics",
 			url: "#",
 			icon: IconChartBar,
 		},
 		{
-			title: "Projects",
+			title: "sidebar.projects",
 			url: "#",
 			icon: IconFolder,
 		},
 		{
-			title: "Team",
+			title: "sidebar.team",
 			url: "#",
 			icon: IconUsers,
 		},
 	],
 	navClouds: [
 		{
-			title: "Capture",
+			title: "sidebar.capture",
 			icon: IconCamera,
 			isActive: true,
 			url: "#",
@@ -83,7 +84,7 @@ const data = {
 			],
 		},
 		{
-			title: "Proposal",
+			title: "sidebar.proposal",
 			icon: IconFileDescription,
 			url: "#",
 			items: [
@@ -98,7 +99,7 @@ const data = {
 			],
 		},
 		{
-			title: "Prompts",
+			title: "sidebar.prompts",
 			icon: IconFileAi,
 			url: "#",
 			items: [
@@ -115,34 +116,34 @@ const data = {
 	],
 	navSecondary: [
 		{
-			title: "Settings",
+			title: "sidebar.secondary.settings",
 			url: "#",
 			icon: IconSettings,
 		},
 		{
-			title: "Get Help",
+			title: "sidebar.secondary.getHelp",
 			url: "#",
 			icon: IconHelp,
 		},
 		{
-			title: "Search",
+			title: "sidebar.secondary.search",
 			url: "#",
 			icon: IconSearch,
 		},
 	],
 	documents: [
 		{
-			name: "Data Library",
+			name: "sidebar.documents.dataLibrary",
 			url: "#",
 			icon: IconDatabase,
 		},
 		{
-			name: "Reports",
+			name: "sidebar.documents.reports",
 			url: "#",
 			icon: IconReport,
 		},
 		{
-			name: "Word Assistant",
+			name: "sidebar.documents.wordAssistant",
 			url: "#",
 			icon: IconFileWord,
 		},
@@ -150,6 +151,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const { t } = useTranslation();
 	return (
 		<Sidebar collapsible="offcanvas" {...props}>
 			<SidebarHeader>

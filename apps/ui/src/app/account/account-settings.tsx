@@ -25,11 +25,11 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
 import { useTRPC } from "@/lib/trpc";
-import { trpcClient } from "@/lib/trpc-client";
 import { useQuery } from "@tanstack/react-query";
-import type { Session, User } from "better-auth";
+import type { Session } from "better-auth";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 // Define interfaces for Better Auth error structure
@@ -40,7 +40,8 @@ interface BetterAuthErrorDetail {
 	statusText?: string;
 }
 
-export function UserSettings() {
+export function AccountSettings() {
+	const { t } = useTranslation();
 	const trpc = useTRPC();
 	const [session, setSession] = useState({} as Session);
 	const [user, setUser] = useState(
@@ -254,18 +255,20 @@ export function UserSettings() {
 
 	return (
 		<div className="space-y-6 p-4 md:p-8">
-			<h1 className="text-2xl font-semibold">User Settings</h1>
+			<h1 className="text-2xl font-semibold">{t("account.settings.title")}</h1>
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Profile Settings</CardTitle>
+					<CardTitle>{t("account.settings.profile.title")}</CardTitle>
 					<CardDescription>
-						Manage your account profile information.
+						{t("account.settings.profile.description")}
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div className="space-y-2">
-						<Label htmlFor="username">Username</Label>
+						<Label htmlFor="username">
+							{t("account.settings.profile.username")}
+						</Label>
 						<Input
 							id="username"
 							value={username}
@@ -273,7 +276,7 @@ export function UserSettings() {
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="email">Email</Label>
+						<Label htmlFor="email">{t("account.settings.profile.email")}</Label>
 						<Input
 							id="email"
 							type="email"
@@ -283,21 +286,23 @@ export function UserSettings() {
 					</div>
 				</CardContent>
 				<CardFooter>
-					<Button onClick={handleProfileSave}>Save Profile</Button>
+					<Button onClick={handleProfileSave}>
+						{t("account.settings.profile.save")}
+					</Button>
 				</CardFooter>
 			</Card>
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Two-Factor Authentication (2FA)</CardTitle>
+					<CardTitle>{t("account.settings.twoFactor.title")}</CardTitle>
 					<CardDescription>
-						Enhance your account security by enabling 2FA with Better Auth.
+						{t("account.settings.twoFactor.description")}
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div className="flex items-center space-x-2">
 						<Label htmlFor="two-factor-switch">
-							<span>Enable Two-Factor Authentication</span>
+							<span>{t("account.settings.twoFactor.enable")}</span>
 						</Label>
 						<Switch
 							id="two-factor-switch"
@@ -307,7 +312,7 @@ export function UserSettings() {
 						/>
 					</div>
 					<span className="font-normal leading-snug text-muted-foreground">
-						You will be prompted to set up 2FA using an authenticator app.
+						{t("account.settings.twoFactor.willPrompt")}
 					</span>
 
 					{/* Section to display QR code and recovery codes after successful enablement */}
@@ -316,11 +321,10 @@ export function UserSettings() {
 							<>
 								<div className="p-4 border rounded-md bg-green-50 dark:bg-green-900/30">
 									<h3 className="font-semibold text-green-700 dark:text-green-400">
-										Complete Your 2FA Setup
+										{t("account.settings.twoFactor.completeYour2FASetup")}
 									</h3>
 									<p className="text-sm text-green-600 dark:text-green-500 mb-2">
-										Scan the QR code below with your authenticator app (e.g.,
-										Google Authenticator, Authy).
+										{t("account.settings.twoFactor.scanQrCode")}
 									</p>
 									<div className="my-4 p-2 border rounded bg-white dark:bg-slate-800 flex justify-center">
 										{totpURIForQrCode && (
@@ -339,11 +343,10 @@ export function UserSettings() {
 
 								<div className="p-4 border rounded-md bg-sky-50 dark:bg-sky-900/30 mt-4">
 									<h3 className="font-semibold text-sky-700 dark:text-sky-400">
-										Verify Authenticator App
+										{t("account.settings.twoFactor.verifyAuthenticatorApp")}
 									</h3>
 									<p className="text-sm text-sky-600 dark:text-sky-500 mb-3">
-										Enter the 6-digit code from your authenticator app to
-										complete the setup.
+										{t("account.settings.twoFactor.enter6DigitCode")}
 									</p>
 									<div className="flex items-center space-x-2">
 										<InputOTP
@@ -366,7 +369,9 @@ export function UserSettings() {
 											onClick={handleVerifyTotpCode}
 											disabled={isVerifyingTotp || totpCodeInput.length !== 6}
 										>
-											{isVerifyingTotp ? "Verifying..." : "Verify & Complete"}
+											{isVerifyingTotp
+												? t("account.settings.twoFactor.verifying")
+												: t("account.settings.twoFactor.verifyAndComplete")}
 										</Button>
 									</div>
 								</div>
@@ -378,11 +383,10 @@ export function UserSettings() {
 						{currentBackupCodes && isBackupCodesVisible && (
 							<div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900/30">
 								<h3 className="font-semibold text-amber-700 dark:text-amber-400">
-									Save Your Backup Codes
+									{t("account.settings.twoFactor.backupCodes")}
 								</h3>
 								<p className="text-sm text-amber-600 dark:text-amber-500 mb-2">
-									Store these backup codes in a safe place. They can be used to
-									access your account if you lose access to your 2FA device.
+									{t("account.settings.twoFactor.backupCodesDescription")}
 								</p>
 								<div className="p-2 border rounded bg-slate-100 dark:bg-slate-800 space-y-1">
 									{currentBackupCodes.map((code) => (
@@ -401,7 +405,7 @@ export function UserSettings() {
 										navigator.clipboard.writeText(currentBackupCodes.join("\n"))
 									}
 								>
-									Copy Codes
+									{t("account.settings.twoFactor.copyBackupCodes")}
 								</Button>
 							</div>
 						)}
@@ -424,16 +428,19 @@ export function UserSettings() {
 			>
 				<DialogContent className="sm:max-w-[425px]">
 					<DialogHeader>
-						<DialogTitle>Confirm Password</DialogTitle>
+						<DialogTitle>
+							{t("account.settings.twoFactor.passwordDialog.title")}
+						</DialogTitle>
 						<DialogDescription>
-							For your security, please enter your current password to{" "}
-							{twoFactorAction} Two-Factor Authentication.
+							{t("account.settings.twoFactor.passwordDialog.description", {
+								action: twoFactorAction,
+							})}
 						</DialogDescription>
 					</DialogHeader>
 					<div className="grid gap-4 py-4">
 						<div className="grid grid-cols-4 items-center gap-4">
 							<Label htmlFor="password-confirm" className="text-right">
-								Password
+								{t("account.settings.twoFactor.passwordDialog.password")}
 							</Label>
 							<Input
 								id="password-confirm"
@@ -454,14 +461,16 @@ export function UserSettings() {
 							}}
 							disabled={isSubmitting}
 						>
-							Cancel
+							{t("account.settings.twoFactor.passwordDialog.cancel")}
 						</Button>
 						<Button
 							type="submit"
 							onClick={confirmTwoFactorChange}
 							disabled={isSubmitting || !passwordInput}
 						>
-							{isSubmitting ? "Confirming..." : "Confirm"}
+							{isSubmitting
+								? t("account.settings.twoFactor.passwordDialog.confirming")
+								: t("account.settings.twoFactor.passwordDialog.confirm")}
 						</Button>
 					</DialogFooter>
 				</DialogContent>
@@ -470,4 +479,4 @@ export function UserSettings() {
 	);
 }
 
-export default UserSettings;
+export default AccountSettings;
