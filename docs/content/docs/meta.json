@@ -1,7 +1,3 @@
 {
-    "pages": [
-      "introduction",
-      "auth",
-      "i18n"
-    ]
+	"pages": ["introduction", "auth", "i18n", "api"]
 }

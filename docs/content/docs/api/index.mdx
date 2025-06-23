@@ -1,0 +1,46 @@
+---
+title: API
+description: API
+---
+
+## Introduction
+
+Buncn comes with an API built on top of [Hono](https://hono.dev).
+
+The API entry point is located in `apps/api/src/index.ts`.
+
+It comes with tRPC pre configured, you can find the router in `apps/api/src/routers/_app.ts`.
+
+## Usage
+
+You can use the API in your UI app by the `trpcClient` instance in `apps/ui/src/lib/trpc-client.ts`.
+
+You can find an example of usage in `apps/ui/src/components/trpc-test.tsx`.
+
+```tsx
+import { trpcClient } from "@/lib/trpc-client";
+import { useEffect, useState } from "react";
+
+export function Example(props: { header: string }) {
+	const [data, setData] = useState<{ id: string; name: string }[]>();
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await trpcClient.userList.query();
+
+			setData(response);
+		};
+		fetchData();
+	}, []);
+
+	return (
+		<>
+			<div>{props.header}</div>
+			{data?.map((user) => (
+				<div key={user.id}>{user.name}</div>
+			))}
+		</>
+	);
+}
+
+```
