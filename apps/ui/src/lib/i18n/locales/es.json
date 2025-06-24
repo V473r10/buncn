@@ -321,5 +321,18 @@
 			"special": "Debe contener al menos un carácter especial",
 			"uppercase": "Debe contener al menos una letra mayúscula"
 		}
+	},
+	"tour": {
+		"welcome": "Bienvenido al Tour",
+		"description": "Recorre un tour rápido para aprender sobre las principales características y funcionalidades de esta aplicación.",
+		"skip": "Saltar",
+		"start": "Iniciar Tour",
+		"settingsTour": {
+			"step1": "Aquí puedes gestionar tus configuraciones de autenticación de dos factores.",
+			"step2": "Activa la autenticación de dos factores para agregar una capa adicional de seguridad a tu cuenta."
+		},
+		"homeTour": {
+			"step1": "En la página de configuración puedes gestionar tus configuraciones de autenticación de dos factores, información, etc."
+		}
 	}
 }

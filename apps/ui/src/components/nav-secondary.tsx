@@ -21,6 +21,7 @@ export function NavSecondary({
 		title: string;
 		url: string;
 		icon: Icon;
+		id?: string;
 	}[];
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
 	const { t } = useTranslation();
@@ -30,7 +31,7 @@ export function NavSecondary({
 				<SidebarMenu>
 					{items.map((item) => (
 						<SidebarMenuItem key={item.title}>
-							<SidebarMenuButton asChild>
+							<SidebarMenuButton asChild id={item.id}>
 								<Link to={item.url}>
 									<item.icon />
 									<span>{t(item.title)}</span>

@@ -30,6 +30,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { TOUR_STEP_IDS } from "@/lib/tour-constants";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
@@ -117,8 +118,9 @@ const data = {
 	navSecondary: [
 		{
 			title: "sidebar.secondary.settings",
-			url: "#",
+			url: "settings",
 			icon: IconSettings,
+			id: TOUR_STEP_IDS.SETTINGS_BUTTON,
 		},
 		{
 			title: "sidebar.secondary.getHelp",

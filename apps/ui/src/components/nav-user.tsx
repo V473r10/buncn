@@ -4,9 +4,11 @@ import {
 	IconLanguage,
 	IconLogout,
 	IconNotification,
+	IconRoute,
 	IconUserCircle,
 } from "@tabler/icons-react";
 
+import { useTour } from "@/components/tour";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -28,6 +30,7 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { TOUR_STEP_IDS } from "@/lib/tour-constants";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -43,8 +46,15 @@ export function NavUser({
 }) {
 	const { t, i18n } = useTranslation();
 	const { isMobile } = useSidebar();
+	const { startTour } = useTour();
 
 	const navigate = useNavigate();
+
+	const handleStartTour = () => {
+		localStorage.setItem("home_tour_completed", "false");
+		localStorage.setItem("settings_tour_completed", "false");
+		startTour();
+	};
 
 	const handleSignOut = async () => {
 		await authClient.signOut({
@@ -101,10 +111,6 @@ export function NavUser({
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem onClick={() => navigate("/user")}>
-								<IconUserCircle />
-								{t("sidebar.userMenu.account")}
-							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<IconCreditCard />
 								{t("sidebar.userMenu.billing")}
@@ -114,6 +120,11 @@ export function NavUser({
 								{t("sidebar.userMenu.notifications")}
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem onClick={handleStartTour}>
+							<IconRoute />
+							<span>Start Tour</span>
+						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuSub>
 							<DropdownMenuSubTrigger>

@@ -1,3 +1,4 @@
+import { type TourStep, useTour } from "@/components/tour";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -24,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
+import { TOUR_STEP_IDS } from "@/lib/tour-constants";
 import { useTRPC } from "@/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 import type { Session } from "better-auth";
@@ -40,7 +42,8 @@ interface BetterAuthErrorDetail {
 	statusText?: string;
 }
 
-export function AccountSettings() {
+export function Settings() {
+	const { setSteps, startTour, isTourCompleted } = useTour();
 	const { t } = useTranslation();
 	const trpc = useTRPC();
 	const [session, setSession] = useState({} as Session);
@@ -52,6 +55,28 @@ export function AccountSettings() {
 	const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState<boolean>(false);
 	const [isBackupCodesVisible, setIsBackupCodesVisible] =
 		useState<boolean>(false);
+
+	const steps: TourStep[] = [
+		{
+			content: <div className="p-2">{t("tour.settingsTour.step1")}</div>,
+			selectorId: TOUR_STEP_IDS.Settings.TwoFactor.CARD,
+			position: "top",
+		},
+		{
+			content: <div className="p-2">{t("tour.settingsTour.step2")}</div>,
+			selectorId: TOUR_STEP_IDS.Settings.TwoFactor.SWITCH,
+			position: "right",
+		},
+	];
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		if (localStorage.getItem("settings_tour_completed") === "true") {
+			return;
+		}
+		setSteps(steps);
+		startTour();
+	}, [setSteps]);
 
 	useEffect(() => {
 		const fetchSession = async () => {
@@ -292,7 +317,7 @@ export function AccountSettings() {
 				</CardFooter>
 			</Card>
 
-			<Card>
+			<Card id={TOUR_STEP_IDS.Settings.TwoFactor.CARD}>
 				<CardHeader>
 					<CardTitle>{t("account.settings.twoFactor.title")}</CardTitle>
 					<CardDescription>
@@ -300,7 +325,10 @@ export function AccountSettings() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<div className="flex items-center space-x-2">
+					<div
+						className="flex items-center space-x-2"
+						id={TOUR_STEP_IDS.Settings.TwoFactor.SWITCH}
+					>
 						<Label htmlFor="two-factor-switch">
 							<span>{t("account.settings.twoFactor.enable")}</span>
 						</Label>
@@ -479,4 +507,4 @@ export function AccountSettings() {
 	);
 }
 
-export default AccountSettings;
+export default Settings;

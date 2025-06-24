@@ -312,5 +312,18 @@
 			"notifications": "Notifications",
 			"signOut": "Sign Out"
 		}
+	},
+	"tour": {
+		"welcome": "Welcome to the Tour",
+		"description": "Take a quick tour to learn about the key features and functionality of this application.",
+		"skip": "Skip",
+		"start": "Start Tour",
+		"settingsTour": {
+			"step1": "Here you can manage your two factor authentication settings.",
+			"step2": "Enable two factor authentication to add an extra layer of security to your account."
+		},
+		"homeTour": {
+			"step1": "On the settings page you can manage your account settings such as two factor authentication, info, etc."
+		}
 	}
 }
