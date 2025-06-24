@@ -69,6 +69,7 @@
 	},
 	"common": {
 		"footer": "© {{year}} Your Company. All rights reserved.",
+		"more": "More",
 		"workflowStreamline": "Streamline your workflow with our powerful platform.",
 		"yourLogo": "Your Logo"
 	},
