@@ -35,7 +35,7 @@ const features: Feature[] = [
 		link: "/docs/api",
 	},
 	{
-		title: "Internatinalization",
+		title: "Internationalization",
 		description: "Translate your app to multiple languages.",
 		icon: <Globe className="h-8 w-8" />,
 		link: "/docs/i18n",
