@@ -7,7 +7,13 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { CreditCard, DatabaseZap, Globe, KeyRound } from "lucide-react";
+import {
+	CreditCard,
+	DatabaseZap,
+	Globe,
+	KeyRound,
+	TramFront,
+} from "lucide-react";
 import BetterAuth from "./icons/better-auth";
 import Hono from "./icons/hono";
 import Polar from "./icons/polar";
@@ -39,6 +45,12 @@ const features: Feature[] = [
 		description: "Translate your app to multiple languages.",
 		icon: <Globe className="h-8 w-8" />,
 		link: "/docs/i18n",
+	},
+	{
+		title: "Guided Tour",
+		description: "Guided tour for new users.",
+		icon: <TramFront className="h-8 w-8" />,
+		link: "/docs/tour",
 	},
 	{
 		title: "Payments",

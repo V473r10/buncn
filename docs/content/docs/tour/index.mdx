@@ -1,0 +1,106 @@
+---
+title: Guided Tour
+description: Guided Tour
+---
+
+## Introduction
+
+Buncn uses [Shadcn/tour](https://tour.niazmorshed.dev/) to provide a guided tour for new users.
+
+## Configuration
+
+The tour configuration keys are located in `apps/ui/src/lib/tour-constants.ts`.
+
+```ts
+export const TOUR_STEP_IDS = {
+	SETTINGS_BUTTON: "settings-button",
+};
+```
+
+The tour provider is located in `apps/ui/src/components/main-layout.tsx`.
+
+The reason why I located the `TourProvider` in the main layout is because I want to englobe any protected route and have the `RouterProvider` features available.
+
+In any page you want to add a tour, you can use the `useTour` hook from `@/components/tour`.
+
+You need to declare the steps in the component and use the `setSteps` function to set them.
+
+Then is important to use the selectorId as id of the element you want to highlight.
+
+If you want to show a welcome Dialog, you can use the `TourAlertDialog` component.
+
+```tsx
+import { useTour } from "@/components/tour";
+
+function MyComponent() {
+	const { setSteps, isTourCompleted } = useTour();
+
+    const steps: TourStep[] = [
+        {
+            content: <div className="p-2">{t("tour.homeTour.step1")}</div>,
+            selectorId: TOUR_STEP_IDS.SETTINGS_BUTTON,
+            position: "right",
+        },
+    ];
+	
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		if (localStorage.getItem("home_tour_completed") === "true") {
+			return;
+		}
+
+		setSteps(steps);
+		const timer = setTimeout(() => {
+			setOpenTour(true);
+		}, 100);
+
+		return () => clearTimeout(timer);
+	}, [setSteps, isTourCompleted]);
+
+    return (
+        <>
+            <button id={TOUR_STEP_IDS.SETTINGS_BUTTON}>Settings</button>
+            <TourAlertDialog isOpen={openTour} setIsOpen={setOpenTour} />
+        </>
+    );
+}
+```
+
+I use `localStorage` to store the tours completion state separated by page.
+
+You can think a better approach to store this state, take mine as an example and a starting point.
+
+I have modified the `TourAlertDialog` component to set every tour completion state when the tour is skipped.
+
+```tsx title="TourAlertDialog"
+export function TourAlertDialog({
+	isOpen,
+	setIsOpen,
+}: { isOpen: boolean; setIsOpen: (isOpen: boolean) => void }) {
+
+    // ...
+    const handleSkip = async () => {
+		localStorage.setItem("home_tour_completed", "true");
+		localStorage.setItem("settings_tour_completed", "true");
+		setIsOpen(false);
+	};
+
+    // ...
+
+    return (
+        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+            <AlertDialogContent>
+                {/* ... */}
+                <div className="mt-6 space-y-3">
+					<Button onClick={startTour} className="w-full">
+						{t("tour.start")}
+					</Button>
+					<Button onClick={handleSkip} variant="ghost" className="w-full">
+						{t("tour.skip")}
+					</Button>
+				</div>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
+}
+```

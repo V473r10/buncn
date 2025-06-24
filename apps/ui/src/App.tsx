@@ -1,11 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-	BrowserRouter,
-	Navigate,
-	Route,
-	Routes,
-	useLocation,
-} from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
 import AuthLayout from "./app/auth/auth-layout.tsx";
 import SignIn from "./app/auth/sign-in/sign-in.tsx";
@@ -17,7 +11,6 @@ import TestRpc from "./app/test-rpc/test-rpc.tsx";
 import { MainLayout } from "./components/main-layout.tsx";
 import { ProtectedRoute } from "./components/protected-route.tsx";
 import { PublicRoute } from "./components/public-route.tsx";
-import { TourProvider } from "./components/tour.tsx";
 import { trpcClient } from "./lib/trpc-client.ts";
 import { TRPCProvider } from "./lib/trpc.ts";
 

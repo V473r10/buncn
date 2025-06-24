@@ -1,12 +1,7 @@
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
-import {
-	TourAlertDialog,
-	TourProvider,
-	type TourStep,
-	useTour,
-} from "@/components/tour";
+import { TourAlertDialog, type TourStep, useTour } from "@/components/tour";
 import { TOUR_STEP_IDS } from "@/lib/tour-constants";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
