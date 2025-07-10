@@ -36,7 +36,8 @@ const features: Feature[] = [
 	},
 	{
 		title: "API",
-		description: "Reusable, extensible and type-safe REST-API for your app.",
+		description:
+			"Reusable, extensible and well-documented REST-API for your app.",
 		icon: <Hono className="h-8 w-8" />,
 		link: "/docs/api",
 	},

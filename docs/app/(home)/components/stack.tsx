@@ -1,11 +1,11 @@
 import BetterAuth from "./icons/better-auth";
+import Biomejs from "./icons/biome";
 import DrizzleORM from "./icons/drizzle";
+import Hono from "./icons/hono";
+import Polar from "./icons/polar";
+import ReactRouter from "./icons/react-router";
 import TanStack from "./icons/tanstack";
 import TRPC from "./icons/trpc";
-import Biomejs from "./icons/biome";
-import ReactRouter from "./icons/react-router";
-import Polar from "./icons/polar";
-import Hono from "./icons/hono";
 
 export const Stack = () => {
 	return (
@@ -25,10 +25,6 @@ export const Stack = () => {
 			<li className={style.li}>
 				<TanStack />
 				{/* <span className={style.span}>TanStack Query</span> */}
-			</li>
-			<li className={style.li}>
-				<TRPC />
-				{/* <span className={style.span}>TRPC</span> */}
 			</li>
 			<li className={style.li}>
 				<Biomejs />

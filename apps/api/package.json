@@ -5,14 +5,16 @@
     "migrate": "bunx --bun @better-auth/cli generate --output ./src/db/auth.schema.ts -y & bun drizzle-kit push"
   },
   "dependencies": {
-    "@hono/trpc-server": "^0.3.4",
-    "@trpc/server": "^11.1.2",
+    "@hono/zod-validator": "^0.7.0",
+    "@scalar/hono-api-reference": "^0.9.6",
     "better-auth": "^1.2.8",
     "drizzle-orm": "^0.43.1",
     "hono": "^4.7.9",
+    "hono-openapi": "^0.4.8",
     "mysql2": "^3.14.1",
     "pg": "^8.16.0",
-    "zod": "^3.25.12"
+    "zod": "^3.25.67",
+    "zod-openapi": "^4.2.4"
   },
   "devDependencies": {
     "@types/bun": "^1.2.13",
