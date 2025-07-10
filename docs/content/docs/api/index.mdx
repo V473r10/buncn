@@ -11,6 +11,14 @@ The API entry point is located in `apps/api/src/index.ts`.
 
 It uses a modular approach for routing. You can find an example router in `apps/api/src/routers/auth.ts`.
 
+## OpenAPI
+
+The API uses [hono-openapi](https://hono.dev/examples/hono-openapi) to generate an OpenAPI 3.0 specification. This allows for automatic generation of interactive API documentation.
+
+Routes are automatically included in the specification by using the `describeRoute` helper function. This function allows you to add metadata to your routes, such as tags, descriptions, and response schemas.
+
+You can view the interactive API documentation, powered by [Scalar](https://github.com/scalar/scalar), by navigating to `/api-reference` when the API server is running.
+
 ## Usage
 
 You can interact with the API using standard HTTP requests from your UI app or any other client.
