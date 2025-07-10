@@ -9,38 +9,34 @@ Buncn comes with an API built on top of [Hono](https://hono.dev).
 
 The API entry point is located in `apps/api/src/index.ts`.
 
-It comes with tRPC pre configured, you can find the router in `apps/api/src/routers/_app.ts`.
+It uses a modular approach for routing. You can find an example router in `apps/api/src/routers/auth.ts`.
 
 ## Usage
 
-You can use the API in your UI app by the `trpcClient` instance in `apps/ui/src/lib/trpc-client.ts`.
+You can interact with the API using standard HTTP requests from your UI app or any other client.
 
-You can find an example of usage in `apps/ui/src/components/trpc-test.tsx`.
+Here is an example of how to fetch data from the `/api/auth/viewBackupCodes` endpoint using `@tanstack/react-query`:
 
 ```tsx
-import { trpcClient } from "@/lib/trpc-client";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-export function Example(props: { header: string }) {
-	const [data, setData] = useState<{ id: string; name: string }[]>();
+export function Example(props: { userId: string }) {
+	const { data: backupCodes, isLoading } = useQuery({
+		queryKey: ["backupCodes", props.userId],
+		queryFn: async () => {
+			const response = await fetch(
+				`http://localhost:3000/api/auth/viewBackupCodes?userId=${props.userId}`
+			);
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
+			}
+			const data = await response.json();
+			return data.backupCodes as string[];
+		},
+		enabled: !!props.userId, // The query will not execute until the userId exists
+	});
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await trpcClient.userList.query();
+	if (isLoading) return <div>Loading backup codes...</div>;
 
-			setData(response);
-		};
-		fetchData();
-	}, []);
-
-	return (
-		<>
-			<div>{props.header}</div>
-			{data?.map((user) => (
-				<div key={user.id}>{user.name}</div>
-			))}
-		</>
-	);
+	// Render your component with the fetched backupCodes
 }
-
-```

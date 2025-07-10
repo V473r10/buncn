@@ -7,12 +7,9 @@ import TwoFactor from "./app/auth/sign-in/two-factor/two-factor.tsx";
 import SignUp from "./app/auth/sign-up/sign-up.tsx";
 import Home from "./app/home/home.tsx";
 import Settings from "./app/settings/settings.tsx";
-import TestRpc from "./app/test-rpc/test-rpc.tsx";
 import { MainLayout } from "./components/main-layout.tsx";
 import { ProtectedRoute } from "./components/protected-route.tsx";
 import { PublicRoute } from "./components/public-route.tsx";
-import { trpcClient } from "./lib/trpc-client.ts";
-import { TRPCProvider } from "./lib/trpc.ts";
 
 function makeQueryClient() {
 	return new QueryClient({
@@ -44,47 +41,44 @@ function App() {
 	return (
 		<>
 			<QueryClientProvider client={queryClient}>
-				<TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-					<BrowserRouter>
-						<Routes>
-							<Route
-								element={
-									<ProtectedRoute>
-										<MainLayout />
-									</ProtectedRoute>
-								}
-							>
-								<Route index element={<Home />} />
-								<Route path="test-rpc" element={<TestRpc />} />
-							</Route>
-							<Route
-								element={
-									<ProtectedRoute>
-										<MainLayout />
-									</ProtectedRoute>
-								}
-							>
-								<Route path="settings" element={<Settings />} />
-							</Route>
-							<Route
-								path="auth"
-								element={
-									<PublicRoute>
-										<AuthLayout />
-									</PublicRoute>
-								}
-							>
-								<Route path="sign-in" element={<SignIn />} />
-								<Route path="sign-in/two-factor" element={<TwoFactor />} />
-								<Route path="sign-up" element={<SignUp />} />
-								<Route index element={<Navigate to="sign-in" replace />} />
-							</Route>
-							{/* Redirect any unknown routes to home */}
-							<Route path="*" element={<Navigate to="/" replace />} />
-						</Routes>
-					</BrowserRouter>
-					<Toaster />
-				</TRPCProvider>
+				<BrowserRouter>
+					<Routes>
+						<Route
+							element={
+								<ProtectedRoute>
+									<MainLayout />
+								</ProtectedRoute>
+							}
+						>
+							<Route index element={<Home />} />
+						</Route>
+						<Route
+							element={
+								<ProtectedRoute>
+									<MainLayout />
+								</ProtectedRoute>
+							}
+						>
+							<Route path="settings" element={<Settings />} />
+						</Route>
+						<Route
+							path="auth"
+							element={
+								<PublicRoute>
+									<AuthLayout />
+								</PublicRoute>
+							}
+						>
+							<Route path="sign-in" element={<SignIn />} />
+							<Route path="sign-in/two-factor" element={<TwoFactor />} />
+							<Route path="sign-up" element={<SignUp />} />
+							<Route index element={<Navigate to="sign-in" replace />} />
+						</Route>
+						{/* Redirect any unknown routes to home */}
+						<Route path="*" element={<Navigate to="/" replace />} />
+					</Routes>
+				</BrowserRouter>
+				<Toaster />
 			</QueryClientProvider>
 		</>
 	);

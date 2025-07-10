@@ -26,9 +26,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
 import { TOUR_STEP_IDS } from "@/lib/tour-constants";
-import { useTRPC } from "@/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
-import type { Session } from "better-auth";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -43,18 +41,13 @@ interface BetterAuthErrorDetail {
 }
 
 export function Settings() {
-	const { setSteps, startTour, isTourCompleted } = useTour();
+	const { setSteps, startTour } = useTour();
 	const { t } = useTranslation();
-	const trpc = useTRPC();
-	const [session, setSession] = useState({} as Session);
-	const [user, setUser] = useState(
-		{} as ReturnType<typeof authClient.getSession>,
-	);
+	const [user, setUser] = useState<Awaited<ReturnType<typeof authClient.getSession>>["data"]["user"] | null>(null);
 	const [username, setUsername] = useState<string>();
 	const [email, setEmail] = useState<string>();
 	const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState<boolean>(false);
-	const [isBackupCodesVisible, setIsBackupCodesVisible] =
-		useState<boolean>(false);
+	const [isBackupCodesVisible, setIsBackupCodesVisible] = useState<boolean>(false);
 
 	const steps: TourStep[] = [
 		{
@@ -84,7 +77,6 @@ export function Settings() {
 			if (!session.data) {
 				return;
 			}
-			setSession(session.data.session);
 			setUser(session.data.user);
 			setUsername(session.data.user.name);
 			setEmail(session.data.user.email);
@@ -112,11 +104,21 @@ export function Settings() {
 		useState<boolean>(false);
 	const [isVerifyingTotp, setIsVerifyingTotp] = useState<boolean>(false);
 
-	const backupCodesQuery = useQuery(
-		trpc.auth.viewBackupCodes.queryOptions({
-			userId: user.id,
-		}),
-	);
+	const backupCodesQuery = useQuery({
+		queryKey: ["backupCodes", user?.id],
+		queryFn: async () => {
+			if (!user?.id) return null;
+			const response = await fetch(
+				`http://localhost:3000/auth/viewBackupCodes?userId=${user.id}`,
+			);
+			if (!response.ok) {
+				throw new Error("Failed to fetch backup codes");
+			}
+			const data = await response.json();
+			return data.backupCodes as string[];
+		},
+		enabled: !!user?.id,
+	});
 
 	// Placeholder for the data structure returned on successful 2FA enablement
 	interface TwoFactorEnableSuccessData {
