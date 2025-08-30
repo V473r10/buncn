@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
+import { AI } from "./app/ai/ai.tsx";
 import AuthLayout from "./app/auth/auth-layout.tsx";
 import SignIn from "./app/auth/sign-in/sign-in.tsx";
 import TwoFactor from "./app/auth/sign-in/two-factor/two-factor.tsx";
@@ -74,6 +75,7 @@ function App() {
 							<Route path="sign-up" element={<SignUp />} />
 							<Route index element={<Navigate to="sign-in" replace />} />
 						</Route>
+						<Route path="ai" element={<AI />} />
 						{/* Redirect any unknown routes to home */}
 						<Route path="*" element={<Navigate to="/" replace />} />
 					</Routes>

@@ -1,11 +1,6 @@
 {
   "name": "buncn",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "scripts/*"
-  ],
   "scripts": {
     "build": "cd apps/api && bun run build & cd apps/ui && bun run build",
     "build:cli": "cd scripts/create-buncn && bun run build",
@@ -18,5 +13,10 @@
     "@tailwindcss/oxide",
     "create-buncn",
     "esbuild"
+  ],
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "scripts/*"
   ]
 }

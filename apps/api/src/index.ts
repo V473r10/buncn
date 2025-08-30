@@ -6,6 +6,7 @@ import { resolver } from "hono-openapi/zod";
 import { cors } from "hono/cors";
 import { z } from "zod";
 import { auth } from "./lib/auth";
+import { aiRouter } from "./routers/ai";
 import { authRouter } from "./routers/auth";
 
 const app = new Hono();
@@ -22,7 +23,9 @@ app.use(
 // Authentication routes - Always use the /api prefix
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
-app.route('/auth', authRouter);
+app.route("/auth", authRouter);
+
+app.route("/ai", aiRouter);
 
 const healthCheckResponse = z.string();
 
